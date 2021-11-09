@@ -16,26 +16,26 @@ We have tested the following versions of OS and softwares：
 * GCC(G++): 4.9/5.3/5.4/7.3
 
 ## Install 
-a. Create a conda virtual environment and activate it.  
+**a. Create a conda virtual environment and activate it.**  
 ```
 conda create -n orientedreppoints python=3.8 -y 
 source activate orientedreppoints
 ```
-b. Make sure your CUDA runtime api version ≤ CUDA driver version. (for example 10.1 ≤ 10.2)
+**b. Make sure your CUDA runtime api version ≤ CUDA driver version. (for example 10.1 ≤ 10.2)**
 ```
 nvcc -V
 nvidia-smi
 ```
-c. Install PyTorch and torchvision following the [official instructions](https://pytorch.org/get-started/previous-versions/), Make sure cudatoolkit version same as CUDA runtime api version, e.g.,
+**c. Install PyTorch and torchvision following the [official instructions](https://pytorch.org/get-started/previous-versions/), Make sure cudatoolkit version same as CUDA runtime api version, e.g.,**
 ```
 conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.1 -c pytorch
 ```
-d. Clone the orientedreppoints_dota repository.
+**d. Clone the orientedreppoints_dota repository.**
 ```
 git clone https://github.com/hukaixuan19970627/OrientedRepPoints_DOTA.git
 cd OrientedRepPoints_DOTA
 ```
-e. Install orientedreppoints_dota.
+**e. Install orientedreppoints_dota.**
 
 ```python 
 pip install -r requirements.txt
@@ -47,8 +47,6 @@ python setup.py develop  #or "pip install -v -e ."
 ```
 cd OrientedRepPoints_DOTA/DOTA_devkit
 sudo apt-get install swig
-```
-```
 swig -c++ -python polyiou.i
 python setup.py build_ext --inplace
 ```
