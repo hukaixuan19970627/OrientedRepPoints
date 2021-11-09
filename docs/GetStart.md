@@ -1,6 +1,6 @@
 # Getting Started
 
-This page provides basic usage based MMdetection. For installation instructions, please see [install.md](https://github.com/LiWentomng/OrientedRepPoints/blob/main/docs/install.md)
+This page provides basic usage based MMdetection. For installation instructions, please see [install.md](install.md)
 
 # Train a model
 
