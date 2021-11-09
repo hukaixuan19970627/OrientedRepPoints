@@ -16,20 +16,20 @@ python DOTA_devkit/ImgSplit_multi_process.py
 python DOTA_devkit/DOTA2COCO.py
 ```
 
-2.1 Train  with a single GPU 
+2. Train  with a single GPU 
 
 ```shell
 python tools/train.py --config 'configs/dota/r50_dota_demo.py'
 ```
 
-2.2 Train with multiple(4) GPUs
+3. Train with multiple(4) GPUs
 
 ```shell
 python -m torch.distributed.launch --nproc_per_node 4 tools/train.py --launcher pytorch \
     --config 'configs/dota/r50_dota_demo.py'
 ```
 
-2.3 Train with specified GPUs. (for example with GPU=2,3)
+4. Train with specified GPUs. (for example with GPU=2,3)
 
 ```shell
 CUDA_VISIBLE_DEVICES=2,3 python -m torch.distributed.launch --nproc_per_node 2 tools/train.py --launcher pytorch \
