@@ -29,7 +29,7 @@ class MultiScaleFlipAug(object):
         for data in aug_data:
             for key, val in data.items():
                 aug_data_dict[key].append(val)
-        return aug_data_dict
+        return aug_data_dict  # ep: {'img': [img_aug1, imgaug2, ..., imgaug_n], 'img_metas': [imgimg_meta1, imgimg_meta2, ..., imgimg_meta_n]}
 
     def __repr__(self):
         repr_str = self.__class__.__name__

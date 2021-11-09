@@ -299,6 +299,11 @@ class splitbase():
 
 
 if __name__ == '__main__':
-    split = splitbase(r'data/dota/train',r'data/dota_train_1024/train_split',
-                      gap=200,subsize=1024,num_process=32)
-    split.splitdata(1)
+    split = splitbase(basepath=r'data/dataset_demo',
+                      outpath=r'data/dataset_demo_split',
+                      gap=200,
+                      subsize=1024,
+                      num_process=8)
+    split.splitdata(0.5)                  
+    split.splitdata(1) 
+    split.splitdata(1.5)

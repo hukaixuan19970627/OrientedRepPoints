@@ -8,13 +8,15 @@ from .registry import DATASETS
 from .voc import VOCDataset
 from .wider_face import WIDERFaceDataset
 from .xml_style import XMLDataset
-from .dota import DotaDataset
 from .hrsc2016 import HRSC2016Dataset
 from .ucasaod import UCASAODDataset
+from .dota import DotaDatasetv1, DotaDatasetv1_5, DotaDatasetv2, DotaDatasetv2_class_above10000, DotaDatasetv2_class_under10000
 
 __all__ = [
     'CustomDataset', 'XMLDataset', 'CocoDataset', 'VOCDataset',
     'CityscapesDataset', 'GroupSampler', 'DistributedGroupSampler',
     'build_dataloader', 'ConcatDataset', 'RepeatDataset', 'WIDERFaceDataset',
-    'DATASETS', 'build_dataset', 'DotaDataset', 'HRSC2016Dataset', 'UCASAODDataset'
+    'DATASETS', 'build_dataset', 'HRSC2016Dataset', 'UCASAODDataset', 
+    'DotaDatasetv1', 'DotaDatasetv1_5', 'DotaDatasetv2', 'DotaDatasetv2_class_above10000',
+    'DotaDatasetv2_class_under10000'
 ]

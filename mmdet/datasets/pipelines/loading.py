@@ -13,8 +13,8 @@ class LoadImageFromFile(object):
     def __init__(self, to_float32=False, color_type='color'):
         self.to_float32 = to_float32
         self.color_type = color_type
-
-    def __call__(self, results):
+    
+    def normal_call(self, results):
         if results['img_prefix'] is not None:
             filename = osp.join(results['img_prefix'],
                                 results['img_info']['filename'])
@@ -39,7 +39,43 @@ class LoadImageFromFile(object):
         num_instances = results['img_info'].get('num_instances', None)
         if num_instances is not None:
             results['num_instances'] = num_instances
+        
+        return results
+    
+    def multi_img_call(self, results_4or9):
+        for results in results_4or9:
+            if results['img_prefix'] is not None:
+                filename = osp.join(results['img_prefix'],
+                                    results['img_info']['filename'])
+            else:
+                filename = results['img_info']['filename']
+            img = mmcv.imread(filename, self.color_type)   # array.shape(h, w, 3)
+            if self.to_float32:
+                img = img.astype(np.float32)
+            results['filename'] = filename
+            results['img'] = img
+            results['img_shape'] = img.shape
+            results['ori_shape'] = img.shape
+            # Set initial values for default meta_keys
+            results['pad_shape'] = img.shape
+            results['scale_factor'] = 1.0
+            num_channels = 1 if len(img.shape) < 3 else img.shape[2]
+            results['img_norm_cfg'] = dict(
+                mean=np.zeros(num_channels, dtype=np.float32),
+                std=np.ones(num_channels, dtype=np.float32),
+                to_rgb=False)
             
+            num_instances = results['img_info'].get('num_instances', None)
+            if num_instances is not None:
+                results['num_instances'] = num_instances
+        
+        return results_4or9
+
+    def __call__(self, results):
+        if not isinstance(results, list):
+            results = self.normal_call(results)
+        else:
+            results = self.multi_img_call(results)
         return results
 
     def __repr__(self):
@@ -141,7 +177,7 @@ class LoadAnnotations(object):
         results['seg_fields'].append('gt_semantic_seg')
         return results
 
-    def __call__(self, results):
+    def normal_call(self, results):
         if self.with_bbox:
             results = self._load_bboxes(results)
             if results is None:
@@ -152,13 +188,36 @@ class LoadAnnotations(object):
             results = self._load_masks(results)
         if self.with_seg:
             results = self._load_semantic_seg(results)
+        
+        return results
+    
+    def multi_img_call(self, results_4or9):
+        for results in results_4or9:
+            if self.with_bbox:
+                results = self._load_bboxes(results)  # results['gt_bboxes'] = ann_info['bboxes']
+                if results is None:
+                    return None
+            if self.with_label:
+                results = self._load_labels(results)
+            if self.with_mask:
+                results = self._load_masks(results)
+            if self.with_seg:
+                results = self._load_semantic_seg(results)
+        
+        return results_4or9
+
+    def __call__(self, results):
+        if not isinstance(results, list):
+            results = self.normal_call(results)
+        else:
+            results = self.multi_img_call(results)
         return results
 
     def __repr__(self):
         repr_str = self.__class__.__name__
         repr_str += ('(with_bbox={}, with_label={}, with_mask={},'
-                     ' with_seg={})').format(self.with_bbox, self.with_label,
-                                             self.with_mask, self.with_seg)
+                     ' with_seg={}, poly2mask={})').format(self.with_bbox, self.with_label,
+                                             self.with_mask, self.with_seg, self.poly2mask)
         return repr_str
 
 

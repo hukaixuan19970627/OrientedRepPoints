@@ -5,10 +5,10 @@ import numpy as np
 import torch
 import torch.distributed as dist
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
-from mmcv.runner import DistSamplerSeedHook, Runner
+from mmcv.runner import DistSamplerSeedHook, Runner, build_optimizer
 
 from mmdet.core import (DistEvalHook, DistOptimizerHook, EvalHook,
-                        Fp16OptimizerHook, build_optimizer)
+                        Fp16OptimizerHook)
 from mmdet.datasets import build_dataloader, build_dataset
 from mmdet.utils import get_root_logger
 
@@ -38,12 +38,12 @@ def parse_losses(losses):
         if isinstance(loss_value, torch.Tensor):
             log_vars[loss_name] = loss_value.mean()
         elif isinstance(loss_value, list):
-            log_vars[loss_name] = sum(_loss.mean() for _loss in loss_value)
+            log_vars[loss_name] = sum(_loss.mean() for _loss in loss_value)  # 每层loss相加
         else:
             raise TypeError(
                 '{} is not a tensor or list of tensors'.format(loss_name))
 
-    loss = sum(_value for _key, _value in log_vars.items() if 'loss' in _key)
+    loss = sum(_value for _key, _value in log_vars.items() if 'loss' in _key) # log_vars中带"loss"的key的valua全部求和
 
     log_vars['loss'] = loss
     for loss_name, loss_value in log_vars.items():

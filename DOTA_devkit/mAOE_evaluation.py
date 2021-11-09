@@ -171,9 +171,12 @@ def aoe_eval(detpath,
     return angle_dif_list
 
 def main():
-    detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_fasterrcnn/{:s}.txt'
-    annopath = r'/mnt/SSD/lwt_workdir/data/dota_new/val/labelTxt/{:s}.txt' # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota_new/val/test.txt'
+    # detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_fasterrcnn/{:s}.txt'
+    # annopath = r'/mnt/SSD/lwt_workdir/data/dota_new/val/labelTxt/{:s}.txt' # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
+    # imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota_new/val/test.txt'
+    detpath = r'/data1/OrientedRepPoints/tools/parse_pkl/evaluation_results/40epoch_detection_results_merged/Task1_{:s}.txt'
+    annopath = r'/dataset/buyingjia/Dota/Dota_V1.0/val/labelTxt/{:s}.txt'  # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
+    imagesetfile = r'/data1/OrientedRepPoints/tools/parse_pkl/evaluation_results/imgnamefile_val1.0.txt'
     
     # For DOTA-v1.0
     classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',

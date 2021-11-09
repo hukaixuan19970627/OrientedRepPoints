@@ -70,8 +70,8 @@ class GIoULossFuction(Function):
     @staticmethod
     def forward(ctx, pred, target, weight=None, reduction=None, avg_factor=None, loss_weight=1.0):
         ctx.save_for_backward(pred)
-
-        convex_gious, grad = convex_giou(pred, target)
+        # convex_gious: tensor.size(n)  grad: tensor.size(n, 18)
+        convex_gious, grad = convex_giou(pred, target) 
         loss = 1 - convex_gious
         if weight is not None:
             loss = loss * weight

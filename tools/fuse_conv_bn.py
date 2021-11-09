@@ -3,9 +3,7 @@ import argparse
 import torch
 import torch.nn as nn
 from mmcv.runner import save_checkpoint
-
 from mmdet.apis import init_detector
-
 
 def fuse_conv_bn(conv, bn):
     """ During inference, the functionary of batch norm layers is turned off

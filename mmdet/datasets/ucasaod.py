@@ -1,7 +1,7 @@
-from .dota import DotaDataset
+from .dota import DotaDatasetv1
 from .registry import DATASETS
 
 
 @DATASETS.register_module
-class UCASAODDataset(DotaDataset):
+class UCASAODDataset(DotaDatasetv1):
     CLASSES = ('car', 'airplane',)

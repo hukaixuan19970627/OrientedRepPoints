@@ -16,9 +16,11 @@ import pdb
 import math
 from multiprocessing import Pool
 from functools import partial
+import shutil
+import argparse
 
 ## the thresh for nms when merge image
-nms_thresh = 0.1
+nms_thresh = 0.2
 
 def py_cpu_nms_poly(dets, thresh):
     scores = dets[:, 8]
@@ -217,7 +219,18 @@ def mergesingle(dstpath, nms, fullname):
                 for det in nameboxnmsdict[imgname]:
                     #print('det:', det)
                     confidence = det[-1]
+                    confidence = round(confidence, 2)
                     bbox = det[0:-1]
+
+                    bbox[0] = round(bbox[0], 1)
+                    bbox[1] = round(bbox[1], 1)
+                    bbox[2] = round(bbox[2], 1)
+                    bbox[3] = round(bbox[3], 1)
+                    bbox[4] = round(bbox[4], 1)
+                    bbox[5] = round(bbox[5], 1)
+                    bbox[6] = round(bbox[6], 1)
+                    bbox[7] = round(bbox[7], 1)
+
                     outline = imgname + ' ' + str(confidence) + ' ' + ' '.join(map(str, bbox))
                     #print('outline:', outline)
                     f_out.write(outline + '\n')
@@ -242,7 +255,10 @@ def mergebyrec(srcpath, dstpath):
     """
     # srcpath = r'E:\bod-dataset\results\bod-v3_rfcn_2000000'
     # dstpath = r'E:\bod-dataset\results\bod-v3_rfcn_2000000_nms'
-
+    if os.path.exists(dstpath):
+        shutil.rmtree(dstpath)  # delete output folderX
+    os.makedirs(dstpath)
+    
     mergebase(srcpath,
               dstpath,
               py_cpu_nms)
@@ -253,6 +269,9 @@ def mergebypoly(srcpath, dstpath):
     """
     # srcpath = r'/home/dingjian/evaluation_task1/result/faster-rcnn-59/comp4_test_results'
     # dstpath = r'/home/dingjian/evaluation_task1/result/faster-rcnn-59/testtime'
+    if os.path.exists(dstpath):
+        shutil.rmtree(dstpath)  # delete output folderX
+    os.makedirs(dstpath)
 
     # mergebase(srcpath,
     #           dstpath,
@@ -260,6 +279,18 @@ def mergebypoly(srcpath, dstpath):
     mergebase_parallel(srcpath,
               dstpath,
               py_cpu_nms_poly_fast)
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='MMDet test (and eval) a model')
+    parser.add_argument('--scrpath', default='/OrientedRepPoints/tools/parse_pkl/evaluation_results/test', help='test config file path')
+    parser.add_argument('--dstpath', default='/OrientedRepPoints/tools/parse_pkl/evaluation_results/test_nms', help='checkpoint file')
+    args = parser.parse_args()
+    return args
+
 if __name__ == '__main__':
-        mergebyrec(r'work_dirs/temp/result_raw',r'work_dirs/temp/result_task2')
+    args = parse_args()
+
+    mergebypoly(srcpath=args.scrpath,
+                dstpath=args.dstpath)
+    print('Result Merge Done!')
     # mergebyrec()

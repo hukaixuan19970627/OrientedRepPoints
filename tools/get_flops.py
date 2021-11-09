@@ -8,12 +8,12 @@ from mmdet.utils import get_model_complexity_info
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a detector')
-    parser.add_argument('config', help='train config file path')
+    parser.add_argument('--config', default='configs/dota/orientedrepoints_r50_mosaic_demo.py',help='train config file path')
     parser.add_argument(
         '--shape',
         type=int,
         nargs='+',
-        default=[1280, 800],
+        default=[1024, 1024],
         help='input image size')
     args = parser.parse_args()
     return args

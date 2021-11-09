@@ -106,9 +106,11 @@ class splitbase():
 
 
 if __name__ == '__main__':
-    split = splitbase(r'data/dota/test/images', r'/workfs/jmhan/dota_ms_1024/test_split/images',
-                      gap=200, subsize=1024, num_process=32)
+    split = splitbase(r'/media/test/4d846cae-2315-4928-8d1b-ca6d3a61a3c6/DOTA/DOTAv1.5/test/images', 
+                      r'/media/test/4d846cae-2315-4928-8d1b-ca6d3a61a3c6/DOTA/DOTAv2.0/test-dev_split/images',
+                      gap=200, subsize=1024, num_process=8)
     split.splitdata(1)
-    split.splitdata(0.5)
-    split.splitdata(1.5)
+    # split.splitdata(0.5)
+    # split.splitdata(1.5)
+    print("Split Done!")
 

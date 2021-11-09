@@ -7,9 +7,10 @@ from . import convex_iou_cuda
 '''
 adapt convex hull of points set for iou/giou calculation 
 from SDL-GuoZonghao: https://github.com/SDL-GuoZonghao/BeyondBoundingBox/blob/main/mmdet/ops/iou/iou_wrapper.py
+Using Shoelace Formula to compute IoU Loss of convex hull 
 '''
 
-def convex_giou(pred, target):
+def convex_giou(pred, target): # pred: tensor.size(n, 18) ;   target: tensor.size(n, 8)
     convex_giou_grad = convex_giou_cuda.convex_giou(pred, target)
     convex_giou_grad = convex_giou_grad.reshape(-1, 19)
     convex_giou = convex_giou_grad[:, -1]

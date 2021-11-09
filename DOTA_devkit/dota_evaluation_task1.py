@@ -17,6 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import polyiou
 from functools import partial
+import argparse
 
 def parse_gt(filename):
     """
@@ -134,7 +135,7 @@ def voc_eval(detpath,
     for imagename in imagenames:
         R = [obj for obj in recs[imagename] if obj['name'] == classname]
         bbox = np.array([x['bbox'] for x in R])
-        difficult = np.array([x['difficult'] for x in R]).astype(np.bool)
+        difficult = np.array([x['difficult'] for x in R]).astype(np.bool_)
         det = [False] * len(R)
         npos = npos + sum(~difficult)
         class_recs[imagename] = {'bbox': bbox,
@@ -239,30 +240,77 @@ def voc_eval(detpath,
     fp = np.cumsum(fp)
     tp = np.cumsum(tp)
 
-    rec = tp / float(npos)
+    rec = tp / float(npos)  # recall
     # avoid divide by zero in case the first detection matches a difficult
     # ground truth
-    prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
+    prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps) # 准确率
     ap = voc_ap(rec, prec, use_07_metric)
 
     return rec, prec, ap
 
+def GetFileFromThisRootDir(dir,ext = None):
+  allfiles = []
+  needExtFilter = (ext != None)
+  for root,dirs,files in os.walk(dir):
+    for filespath in files:
+      filepath = os.path.join(root, filespath)
+      extension = os.path.splitext(filepath)[1][1:]
+      if needExtFilter and extension in ext:
+        allfiles.append(filepath)
+      elif not needExtFilter:
+        allfiles.append(filepath)
+  return allfiles
+
+def image2txt(srcpath, dstpath):
+    """
+    将srcpath文件夹下的所有子文件名称打印到namefile.txt中
+    @param srcpath: imageset
+    @param dstpath: imgnamefile.txt的存放路径
+    """
+    filelist = GetFileFromThisRootDir(srcpath)  # srcpath文件夹下的所有文件相对路径 eg:['example_split/../P0001.txt', ..., '?.txt']
+    for fullname in filelist:  # 'example_split/../P0001.txt'
+        name = os.path.basename(os.path.splitext(fullname)[0])# 只留下文件名 eg:P0001
+        dstname = os.path.join(dstpath, 'imgnamefile_demo.txt')  # eg: result/imgnamefile.txt
+        if not os.path.exists(dstpath):
+            os.makedirs(dstpath)
+        with open(dstname, 'a') as f:
+            f.writelines(name + '\n')
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='MMDet test (and eval) a model')
+    parser.add_argument('--detpath', default='work_dirs/swin_tiny_patch4_window7_dotav2/Task1_results/Task1_{:s}.txt', help='test config file path')
+    parser.add_argument('--annopath', default='data/dataset_demo/labelTxt/{:s}.txt', help='checkpoint file')
+    parser.add_argument('--imagesetfile', default='data/dataset_demo/imgnamefile_demo.txt', help='checkpoint file')
+    args = parser.parse_args()
+    return args
+
 def main():
+    args = parse_args()
     # detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_roitran/{:s}.txt'
-    detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_ours/Task1_{:s}.txt'
-    annopath = r'/mnt/SSD/lwt_workdir/data/dota_new/val/labelTxt/{:s}.txt'  # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota_new/val/test.txt'
+    detpath = args.detpath
+    annopath = args.annopath
+    imagesetfile = args.imagesetfile
     
+    # For DOTA-v2.0
+    classnames = [ 'plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship',
+         'tennis-court', 'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor',
+         'swimming-pool', 'helicopter', 'container-crane', 'airport', 'helipad']
     # For DOTA-v1.5
     # classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
     #             'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor', 'swimming-pool', 'helicopter', 'container-crane']
     # For DOTA-v1.0
-    classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
-                'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor', 'swimming-pool', 'helicopter']
+    # classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
+    #             'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor', 'swimming-pool', 'helicopter']
     classaps = []
     map = 0
+    skippedClassCount = 0
     for classname in classnames:
         print('classname:', classname)
+        detfile = detpath.format(classname)
+        if not (os.path.exists(detfile)):
+            skippedClassCount += 1
+            print('This class is not be detected in your dataset: {:s}'.format(classname))
+            continue
         rec, prec, ap = voc_eval(detpath,
              annopath,
              imagesetfile,
@@ -288,9 +336,10 @@ def main():
         # plt.plot(rec, prec)
         # # plt.show()
         # plt.savefig('pr_curve/{}.png'.format(classname))
-    map = map/len(classnames)
+    map = map/(len(classnames)-skippedClassCount)
     print('map:', map)
     classaps = 100*np.array(classaps)
     print('classaps: ', classaps)
 if __name__ == '__main__':
     main()
+    #image2txt('data/dataset_demo/images', 'data/dataset_demo/')

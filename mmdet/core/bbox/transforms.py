@@ -357,12 +357,12 @@ def rbbox2result(bboxes, labels, num_classes):
     """Convert detection results to a list of numpy arrays.
 
     Args:
-        bboxes (Tensor): shape (n, 5)
-        labels (Tensor): shape (n, )
+        bboxes (Tensor): shape (n, 5)  orientreppoint -> shape(n, [18, 8, score])
+        labels (Tensor): shape (n, )   orientreppoint -> shape(n)
         num_classes (int): class number, including background class
 
     Returns:
-        list(ndarray): bbox results of each class
+        list(ndarray): bbox results of each class, list(num_classes * array)  array.size(n, [18, 8, score])
     """
     if bboxes.shape[0] == 0:
         return [
@@ -372,7 +372,7 @@ def rbbox2result(bboxes, labels, num_classes):
         bboxes = bboxes.cpu().numpy()
         # print('bboxes', bboxes)
         labels = labels.cpu().numpy()
-        return [bboxes[labels == i, :] for i in range(num_classes - 1)]
+        return [bboxes[labels == i, :] for i in range(num_classes - 1)]   # 按类别给结果排序 从类别id：0开始 return list(array*num_classes)  array.size(n, [8, 18, score])
     
 
 def distance2bbox(points, distance, max_shape=None):

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from ..registry import LOSSES
-from mmdet.ops.point_justify import pointsJf
+from mmdet.ops.point_justify import pointsJf  # 判断点集与多边形的包含关系
 
 @LOSSES.register_module
 class SpatialBorderLoss(nn.Module):
@@ -20,7 +20,7 @@ def spatial_border_loss(pts, gt_bboxes, reduction='mean', y_first=False):
     num_gt, num_pts = gt_bboxes.size(0), pts.size(0)
     loss = pts.new_zeros([0])
 
-    if num_gt > 0:
+    if num_gt > 0:   # 分别判断9个语义点是否在poly区域内
         inside_flag_1 = torch.full([num_pts, num_gt], 0.).to(gt_bboxes.device).float()
         pt_1 = pts[:, 0:2].reshape(num_pts, 2).contiguous()
         pointsJf(pt_1, gt_bboxes, inside_flag_1)
@@ -72,7 +72,7 @@ def spatial_border_loss(pts, gt_bboxes, reduction='mean', y_first=False):
         pts = pts.reshape(-1, 9, 2)
         out_border_pts = pts[torch.where(inside_flag == 0)]
 
-        if out_border_pts.size(0) > 0:
+        if out_border_pts.size(0) > 0:  # 在GT区域外的语义点则计算与gt box中心点的欧氏距离作为惩罚
             corres_gt_boxes = gt_bboxes[torch.where(inside_flag == 0)[0]]
             corres_gt_boxes_center_x = (corres_gt_boxes[:, 0] + corres_gt_boxes[:, 4]) / 2.0
             corres_gt_boxes_center_y = (corres_gt_boxes[:, 1] + corres_gt_boxes[:, 5]) / 2.0

@@ -170,6 +170,9 @@ def images_to_levels(target, num_level_anchors):
     return level_targets
 
 def levels_to_images(mlvl_tensor, flatten=False):
+    """
+    turn List[5*tesnor] -> List[b*tensor]  tensor.size(-1, channel)
+    """
     # convert targets by levels to targets by feature level.
     batch_size = mlvl_tensor[0].size(0)
     batch_list = [[] for _ in range(batch_size)]

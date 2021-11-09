@@ -92,8 +92,8 @@ def generate_json_labels(src_path, out_path, trainval=True):
 
 
 if __name__ == '__main__':
-    generate_json_labels('/mnt/SSD/lwt_workdir/BeyondBoundingBox/data/ucas_aod/Train/',
-                         '/mnt/SSD/lwt_workdir/BeyondBoundingBox/data/ucas_aod/Train/trainval.json')
-    generate_json_labels('/mnt/SSD/lwt_workdir/BeyondBoundingBox/data/ucas_aod/Test/',
-                         '/mnt/SSD/lwt_workdir/BeyondBoundingBox/data/ucas_aod/Test/test.json', trainval=False)
+    generate_json_labels('/data1/dataset_demo/DOTA_demo/',
+                         '/data1/OrientedRepPoints/data/dota/trainval_split/trainval.json')
+    generate_json_labels('/data1/dataset_demo/DOTA_demo/',
+                         '/data1/OrientedRepPoints/data/dota/test_split/test.json', trainval=False)
     print('done!')

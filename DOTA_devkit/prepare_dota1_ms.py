@@ -79,8 +79,8 @@ def prepare_multi_scale_data(src_path, dst_path, gap=200, subsize=1024, scales=[
 
 if __name__ == '__main__':
     # single scale
-    prepare_multi_scale_data('/mnt/SSD/lwt_workdir/data/dota_new/',
-                             '/mnt/SSD/lwt_workdir/data/dota_1024', scales=[1.0], gap=824)
+    prepare_multi_scale_data('/data1/dataset_demo/DOTA_demo/',
+                             '/data1/OrientedRepPoints/data/dota_1024', scales=[1.0], gap=200)
     # multi scale
     # prepare_multi_scale_data('/mnt/SSD/lwt_workdir/data/dota_new/',
     #                          '/mnt/SSD/lwt_workdir/data/dota_1024_ms', scales=[0.5, 1.0,  1.5], gap=500)

@@ -23,6 +23,8 @@ def parse_gt(filename):
         splitlines = [x.strip().split(' ')  for x in lines]
         for splitline in splitlines:
             object_struct = {}
+            if len(splitline) < 9:
+                continue
             object_struct['name'] = splitline[8]
             if (len(splitline) == 9):
                 object_struct['difficult'] = 0
@@ -233,12 +235,13 @@ def main():
     # annopath = r'I:\dota\testset\ReclabelTxt-utf-8\{:s}.txt'
     # imagesetfile = r'I:\dota\testset\va.txt'
  
-    detpath = r'work_dirs/temp/result_merge/Task2_{:s}.txt'
-    annopath = r'data/dota/test/hbb_label_txt/{:s}.txt'# change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    imagesetfile = r'data/dota/test/testset.txt'
+    detpath = r'tools/parse_pkl/evaluation_results/dotav2_merged_HBB/Task2_{:s}.txt'
+    annopath = r'/dataset/Dota/Dota_V2.0/val/labelTxt-v2.0/Val_Task2_gt/{:s}.txt'# change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
+    imagesetfile = r'tools/parse_pkl/evaluation_results/imgnamefile_val2.0.txt'
 
-    classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
-                'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor', 'swimming-pool', 'helicopter']
+    classnames = [ 'plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship',
+         'tennis-court', 'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor',
+         'swimming-pool', 'helicopter', 'container-crane', 'airport', 'helipad']
     classaps = []
     map = 0
     for classname in classnames:

@@ -5,7 +5,7 @@ import mmcv
 import torch
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
 from mmcv.runner import get_dist_info, init_dist, load_checkpoint
-from tools.fuse_conv_bn import fuse_module
+from fuse_conv_bn import fuse_module
 
 from mmdet.apis import multi_gpu_test, single_gpu_test
 from mmdet.core import wrap_fp16_model
@@ -47,9 +47,9 @@ class MultipleKVAction(argparse.Action):
 def parse_args():
     parser = argparse.ArgumentParser(
         description='MMDet test (and eval) a model')
-    parser.add_argument('config', help='test config file path')
-    parser.add_argument('checkpoint', help='checkpoint file')
-    parser.add_argument('--out', help='output result file in pickle format')
+    parser.add_argument('--config', default='configs/dota/swin_large_All_MultiAug_ms_dotav2.py', help='test config file path')
+    parser.add_argument('--checkpoint', default='work_dirs/swin_large_All_MultiAug_ms_dotav2/epoch_40.pth', help='checkpoint file')
+    parser.add_argument('--out', default='tools/parse_pkl/demo.pkl', help='output result file in pickle format')
     parser.add_argument(
         '--fuse_conv_bn',
         action='store_true',
@@ -123,7 +123,7 @@ def main():
     dataset = build_dataset(cfg.data.test)
     data_loader = build_dataloader(
         dataset,
-        imgs_per_gpu=1,
+        imgs_per_gpu=1,  # batch_size=1 for every gpu
         workers_per_gpu=cfg.data.workers_per_gpu,
         dist=distributed,
         shuffle=False)
@@ -145,7 +145,7 @@ def main():
 
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])
-        outputs = single_gpu_test(model, data_loader, args.show)
+        outputs = single_gpu_test(model, data_loader, args.show) # list[num_epoch/batch_size * list[batch_size * list[num_classes * array(n, [18, 8, score])]][0] ]
     else:
         model = MMDistributedDataParallel(
             model.cuda(),
@@ -158,7 +158,7 @@ def main():
     if rank == 0:
         if args.out:
             print('\nwriting results to {}'.format(args.out))
-            mmcv.dump(outputs, args.out)
+            mmcv.dump(outputs, args.out)     # 将result数据以二进制形式写入 out文件夹中保存
         kwargs = {} if args.options is None else args.options
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
