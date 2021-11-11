@@ -9,7 +9,7 @@ Based on the _Oriented Reppoints_ detector with [Swin Transformer](https://githu
 
 # New Feature
 - **BackBone**: add **Swin-Transformer**, **ReResNet**
-- **DataAug**: add **Mosaic4or9**, Mixup, HSV, **RandomPerspective**
+- **DataAug**: add **Mosaic4or9**, Mixup, HSV, **RandomPerspective**, **RandomScaleCrop**
 ![DataAug out](docs/DataAug.jpeg)
 
 
