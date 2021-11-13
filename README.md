@@ -24,12 +24,12 @@ This repo is based on ![mmdetection](https://github.com/open-mmlab/mmdetection).
 # Results and Models
 The results on DOTA test-dev set are shown in the table below(password:aabb/swin/ABCD). More detailed results please see the paper.
 
-  Model| Backbone  | MS | DataAug | DOTAv1 mAP | DOTAv2 mAP| Download
+  Model| Backbone  | MS Train/Test | DataAug | DOTAv1 mAP | DOTAv2 mAP| Download
  ----  | ----- | ------  | ------| ------ | ------ | ------ |
  OrientedReppoints| R-50| - | -| 75.68 | - |[baidu(aabb)](https://pan.baidu.com/s/1fCgmpd3MWoCbI80wYwtV2w)
  OrientedReppoints| R-101| - | √| 76.21 | - |[baidu(aabb)](https://pan.baidu.com/s/1WN2QKMR6vrTzrJGCcukt8A)
  OrientedReppoints| R-101| √ | √ | 78.12| - |[baidu(aabb)](https://pan.baidu.com/s/1Rv2ujQEt56R9nw-QjJlMIg)
- OrientedReppoints| SwinT-tiny| - | √ | - | - | -
+ OrientedReppoints| SwinT-tiny| - | √ | - | 59.93 | [baidu(aabb)](https://pan.baidu.com/s/10Q9XHs9wPk0W6NbTAiO8UA)
 
 **ImageNet-1K and ImageNet-22K Pretrained Models**
 
