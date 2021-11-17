@@ -70,7 +70,7 @@ The visual results of learning points and the oriented bounding boxes. The visua
 ![Oriented Box](https://user-images.githubusercontent.com/32033843/119213335-edd4dd80-baf0-11eb-86db-459fe2a14735.png)
 
 # More details
-[DOTAv2遥感图像旋转目标检测竞赛经验分享（Swin Transformer + Anchor free/based方案](https://zhuanlan.zhihu.com/p/422764914)
+[DOTAv2遥感图像旋转目标检测竞赛经验分享（Swin Transformer + Anchor free/based方案）](https://zhuanlan.zhihu.com/p/422764914)
 
 # Citation
 ```shell
