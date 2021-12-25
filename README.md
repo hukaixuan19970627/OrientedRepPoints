@@ -74,11 +74,11 @@ The visual results of learning points and the oriented bounding boxes. The visua
 
 # Citation
 ```shell
-@article{Li2021oriented,
-  title={Oriented RepPoints for Aerial Object Detection},
-  author={Wentong Li and Jianke Zhu},
-  journal={arXiv preprint arXiv:2105.11111},
-  year={2021}
+@article{li2021oriented,
+	title="Oriented RepPoints for Aerial Object Detection.",
+	author="Wentong {Li}, Yijie {Chen}, Kaixuan {Hu}, Jianke {Zhu}.",
+	journal="arXiv preprint arXiv:2105.11111",
+	year="2021"
 }
 ```
 
